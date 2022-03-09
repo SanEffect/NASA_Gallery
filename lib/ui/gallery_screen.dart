@@ -18,6 +18,7 @@ class GalleryScreen extends BaseStatefulWidget {
 class GalleryScreenState extends State<GalleryScreen>
     with AutomaticKeepAliveClientMixin<GalleryScreen> {
   bool isListView = false;
+  int itemsNumber = 12;
 
   @override
   void initState() {
@@ -68,26 +69,22 @@ class GalleryScreenState extends State<GalleryScreen>
             },
           )),
     );
-
-    // return Scaffold(
-    //     appBar: AppBar(
-    //         title: Text(widget.title),
-    //         backgroundColor: Colors.teal,
-    //         actions: createAppBarActions()),
-    //     body: ListView(children: <Widget>[
-    //       if (photosIsLoaded) ...[
-    //         (isListView) ? listView() : gridView()
-    //       ]
-    //     ]));
   }
 
   @override
   bool get wantKeepAlive => true;
 
   Widget gridView(AsyncSnapshot<MarsRoverPhotosResponse> response) {
-    return Container(
-        padding: const EdgeInsets.all(4),
-        child: GridView.builder(
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (scrollNotification.metrics.pixels ==
+            scrollNotification.metrics.maxScrollExtent) {
+          setState(() => itemsNumber += 12);
+        }
+        return true;
+      },
+      child: GridView.builder(
+          itemCount: itemsNumber,
           shrinkWrap: true,
           physics: const ScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -95,13 +92,9 @@ class GalleryScreenState extends State<GalleryScreen>
             mainAxisSpacing: 4,
             crossAxisCount: 3,
           ),
-          // itemCount: _items.length,
-          itemCount: 27,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                print('Go to detail page. Index: $index');
-
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -120,13 +113,19 @@ class GalleryScreenState extends State<GalleryScreen>
                 ),
               ),
             );
-          },
-        ));
+          }),
+    );
   }
 
   Widget listView(AsyncSnapshot<MarsRoverPhotosResponse> response) {
-    return Container(
-        padding: const EdgeInsets.all(4),
+    return NotificationListener<ScrollNotification>(
+        onNotification: (scrollNotification) {
+          if (scrollNotification.metrics.pixels ==
+              scrollNotification.metrics.maxScrollExtent) {
+            setState(() => itemsNumber += 12);
+          }
+          return true;
+        },
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
@@ -134,8 +133,6 @@ class GalleryScreenState extends State<GalleryScreen>
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                print('Go to detail page. Index: $index');
-
                 Navigator.push(
                   context,
                   MaterialPageRoute(
