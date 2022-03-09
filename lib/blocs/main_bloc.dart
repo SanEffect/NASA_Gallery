@@ -5,7 +5,6 @@ import '../data/repositories/astronomy_repository.dart';
 import 'base_bloc.dart';
 
 class MainBloc extends BaseBloc {
-
   final AstronomyRepository astronomyRepository = AstronomyRepository();
   final _pictureFetcher = PublishSubject<ApodResponse>();
 
@@ -13,7 +12,7 @@ class MainBloc extends BaseBloc {
 
   fetchPictureOfTheDay() async {
     ApodResponse? picture = await astronomyRepository.getPictureOfTheDay();
-    if(picture != null) {
+    if (picture != null) {
       _pictureFetcher.sink.add(picture);
     }
   }
@@ -22,7 +21,6 @@ class MainBloc extends BaseBloc {
   void dispose() {
     _pictureFetcher.close();
   }
-
 }
 
 final mainBloc = MainBloc();

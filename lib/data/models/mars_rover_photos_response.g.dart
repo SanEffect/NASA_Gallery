@@ -9,7 +9,10 @@ part of 'mars_rover_photos_response.dart';
 MarsRoverPhotosResponse _$MarsRoverPhotosResponseFromJson(
         Map<String, dynamic> json) =>
     MarsRoverPhotosResponse(
-      photos: json['photos'] as List<dynamic>,
+      photos: (json['photos'] as List<dynamic>)
+          .map(
+              (e) => MarsRoverPhotoResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$MarsRoverPhotosResponseToJson(
@@ -26,8 +29,7 @@ MarsRoverPhotoResponse _$MarsRoverPhotoResponseFromJson(
       img_src: json['img_src'] as String,
       earth_date: json['earth_date'] as String,
       rover: MarsRover.fromJson(json['rover'] as Map<String, dynamic>),
-      roverCamera:
-          MarsRoverCamera.fromJson(json['roverCamera'] as Map<String, dynamic>),
+      camera: MarsRoverCamera.fromJson(json['camera'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$MarsRoverPhotoResponseToJson(
@@ -35,7 +37,7 @@ Map<String, dynamic> _$MarsRoverPhotoResponseToJson(
     <String, dynamic>{
       'id': instance.id,
       'sol': instance.sol,
-      'roverCamera': instance.roverCamera,
+      'camera': instance.camera,
       'img_src': instance.img_src,
       'earth_date': instance.earth_date,
       'rover': instance.rover,

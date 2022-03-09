@@ -61,7 +61,7 @@ class MainScreenState extends State<MainScreen>
             Container(
                 color: Colors.white,
                 child: FadeInImage.assetNetwork(
-                    placeholder: '../assets/placeholder.png',
+                    placeholder: 'assets/images/placeholder-image.png',
                     image: response.data!.url)),
             Padding(
               padding: const EdgeInsets.all(8.0),

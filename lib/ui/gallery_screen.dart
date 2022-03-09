@@ -9,7 +9,7 @@ import 'base_stateful_widget.dart';
 import 'mars_photo_detail_screen.dart';
 
 class GalleryScreen extends BaseStatefulWidget {
-  const GalleryScreen({Key? key}) : super(key: key, title: "Gallery Screen");
+  const GalleryScreen({Key? key}) : super(key: key, title: "Mars rover photos");
 
   @override
   State<GalleryScreen> createState() => GalleryScreenState();
@@ -93,23 +93,34 @@ class GalleryScreenState extends State<GalleryScreen>
             crossAxisCount: 3,
           ),
           itemBuilder: (context, index) {
+            MarsRoverPhotosResponse? marsRoverPhotosResponse = response.data;
+            MarsRoverPhotoResponse? marsRoverPhotoResponse = marsRoverPhotosResponse?.photos[index];
+
+            if (marsRoverPhotoResponse == null) {
+              return ListView(children: const [
+                Text("Failed getting mars rover photos")
+              ]);
+            }
+
             return GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const MarsPhotoDetailScreen()),
+                    builder: (context) => const MarsPhotoDetailScreen(),
+                    settings: RouteSettings(
+                      arguments: marsRoverPhotoResponse,
+                    ),
+                  ),
                 );
               },
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: CachedNetworkImageProvider(
-                        response.data?.photos[index]['img_src']),
-                    // marsRoverPhotosResponse.photos[index]['img_src']),
-                  ),
+                      fit: BoxFit.cover,
+                      image: CachedNetworkImageProvider(
+                          marsRoverPhotoResponse.img_src)),
                 ),
               ),
             );
@@ -131,6 +142,14 @@ class GalleryScreenState extends State<GalleryScreen>
           shrinkWrap: true,
           physics: const ScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
+            MarsRoverPhotoResponse? marsRoverPhotoResponse =
+                response.data?.photos[index];
+            if (marsRoverPhotoResponse == null) {
+              return ListView(children: const [
+                Text("Failed getting mars rover photos")
+              ]);
+            }
+
             return GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -142,10 +161,10 @@ class GalleryScreenState extends State<GalleryScreen>
               child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: CachedNetworkImage(
-                      imageUrl: response.data?.photos[index]['img_src'])),
+                      imageUrl: marsRoverPhotoResponse.img_src)),
             );
           },
-          itemCount: 27,
+          itemCount: itemsNumber,
         ));
   }
 }
