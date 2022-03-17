@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../blocs/bloc_provider.dart';
-import '../blocs/main_bloc.dart';
-import '../data/models/apod_response.dart';
-import 'base_stateful_widget.dart';
+import '../common/bloc_provider.dart';
+import 'main_bloc.dart';
+import '../../data/models/apod_response.dart';
+import '../common/base_stateful_widget.dart';
 
 class MainScreen extends BaseStatefulWidget {
   const MainScreen({Key? key})
@@ -30,7 +30,7 @@ class MainScreenState extends State<MainScreen>
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(widget.title),
-            backgroundColor: Colors.teal,
+            backgroundColor: const Color(0xffb121b22),
           ),
           body: StreamBuilder(
             stream: mainBloc.pictureOfTheDay,

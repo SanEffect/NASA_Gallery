@@ -1,22 +1,23 @@
 import 'dart:convert';
 
 import 'package:astro_gallery/data/rest/astronomy_api_client.dart';
-import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 
-import '../models/mars_rover_photos_response.dart';
 import '../models/apod_response.dart';
+import '../models/mars_rover_photos_response.dart';
 import 'iastronomy_repository.dart';
 
 class AstronomyRepository implements IAstronomyRepository {
-  ApiClient? mClient;
+
+  late ApiClient mClient;
 
   AstronomyRepository() {
-    mClient = ApiClient(Dio(), baseUrl: '');
+    mClient = GetIt.I<ApiClient>();
   }
 
   @override
   Future<ApodResponse?> getPictureOfTheDay() async {
-    ApodResponse? res = await mClient?.getPictureOfTheDay();
+    ApodResponse? res = await mClient.getPictureOfTheDay();
 
     if (res != null) {
       print('ApodResponse: ' + json.encode(res));
@@ -31,7 +32,7 @@ class AstronomyRepository implements IAstronomyRepository {
 
   @override
   Future<MarsRoverPhotosResponse?> getMarsRoverPhotos() async {
-    MarsRoverPhotosResponse? res = await mClient?.getMarsRoverPhotos();
+    MarsRoverPhotosResponse? res = await mClient.getMarsRoverPhotos();
 
     if (res != null) {
       print('MarsRoverPhotosResponse: ' + json.encode(res));

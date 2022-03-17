@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'gallery_screen.dart';
-import 'main_screen.dart';
+import '../gallery/gallery_screen.dart';
+import '../main/main_screen.dart';
 
 class TabContainerDefault extends StatefulWidget {
   const TabContainerDefault({required Key key}) : super(key: key);
