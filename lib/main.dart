@@ -1,9 +1,13 @@
-import 'package:astro_gallery/ui/tab_container_default.dart';
+import 'package:astro_gallery/presentation/common/tab_container_default.dart';
 import 'package:flutter/material.dart';
+import 'core/di/setup.dart';
 
 void main() {
+  setupLocator();
   runApp(const MyApp());
 }
+
+// #
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -23,7 +27,8 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.teal
+        // primarySwatch: Colors.teal
+        primaryColor: const Color(0xffb121b22)
         // primarySwatch: const MaterialColor(0xff010B19, {}) //#010B19
       ),
       // home: const MainScreen(),

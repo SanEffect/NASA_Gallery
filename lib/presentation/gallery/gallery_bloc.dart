@@ -1,7 +1,7 @@
 import 'package:rxdart/rxdart.dart';
-import '../data/models/mars_rover_photos_response.dart';
-import '../data/repositories/astronomy_repository.dart';
-import 'base_bloc.dart';
+import '../../data/models/mars_rover_photos_response.dart';
+import '../../data/repositories/astronomy_repository.dart';
+import '../common/base_bloc.dart';
 
 class GalleryBloc extends BaseBloc {
 

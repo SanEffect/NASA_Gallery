@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../blocs/bloc_provider.dart';
-import '../blocs/gallery_bloc.dart';
-import '../data/models/mars_rover_photos_response.dart';
-import 'base_stateful_widget.dart';
-import 'mars_photo_detail_screen.dart';
+import '../common/bloc_provider.dart';
+import 'gallery_bloc.dart';
+import '../../data/models/mars_rover_photos_response.dart';
+import '../common/base_stateful_widget.dart';
+import '../details/mars_photo_detail_screen.dart';
 
 class GalleryScreen extends BaseStatefulWidget {
   const GalleryScreen({Key? key}) : super(key: key, title: "Mars rover photos");
@@ -54,7 +54,7 @@ class GalleryScreenState extends State<GalleryScreen>
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
               title: Text(widget.title),
-              backgroundColor: Colors.teal,
+              backgroundColor: const Color(0xffb121b22),
               actions: createAppBarActions()),
           body: StreamBuilder(
             stream: galleryBloc.marsRoverPictures,
@@ -94,12 +94,12 @@ class GalleryScreenState extends State<GalleryScreen>
           ),
           itemBuilder: (context, index) {
             MarsRoverPhotosResponse? marsRoverPhotosResponse = response.data;
-            MarsRoverPhotoResponse? marsRoverPhotoResponse = marsRoverPhotosResponse?.photos[index];
+            MarsRoverPhotoResponse? marsRoverPhotoResponse =
+                marsRoverPhotosResponse?.photos[index];
 
             if (marsRoverPhotoResponse == null) {
-              return ListView(children: const [
-                Text("Failed getting mars rover photos")
-              ]);
+              return ListView(
+                  children: const [Text("Failed getting Mars rover photos")]);
             }
 
             return GestureDetector(
@@ -109,7 +109,7 @@ class GalleryScreenState extends State<GalleryScreen>
                   MaterialPageRoute(
                     builder: (context) => const MarsPhotoDetailScreen(),
                     settings: RouteSettings(
-                      arguments: marsRoverPhotoResponse,
+                      arguments: DetailScreenArguments(index, marsRoverPhotosResponse!),
                     ),
                   ),
                 );
@@ -142,12 +142,14 @@ class GalleryScreenState extends State<GalleryScreen>
           shrinkWrap: true,
           physics: const ScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
+
+            MarsRoverPhotosResponse? marsRoverPhotosResponse = response.data;
             MarsRoverPhotoResponse? marsRoverPhotoResponse =
-                response.data?.photos[index];
+            marsRoverPhotosResponse?.photos[index];
+
             if (marsRoverPhotoResponse == null) {
-              return ListView(children: const [
-                Text("Failed getting mars rover photos")
-              ]);
+              return ListView(
+                  children: const [Text("Failed getting Mars rover photos")]);
             }
 
             return GestureDetector(
@@ -155,7 +157,10 @@ class GalleryScreenState extends State<GalleryScreen>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const MarsPhotoDetailScreen()),
+                      builder: (context) => const MarsPhotoDetailScreen(),
+                      settings: RouteSettings(
+                        arguments: DetailScreenArguments(index, marsRoverPhotosResponse!),
+                      )),
                 );
               },
               child: Padding(
