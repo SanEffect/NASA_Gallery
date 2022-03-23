@@ -9,7 +9,6 @@ class ApiCalls {
   static const String key = "QCWnMqRWFjbKAYQ7HfRYTN2jEdis2jYf65V2vkf8";
 
   static const String planetary = '/planetary/apod?api_key=$key';
-  // static const String marsRoverPhotos = '/mars-photos/api/v1/rovers/curiosity/photos?sol=100&api_key=$key';
   static const String marsRoverPhotos = '/mars-photos/api/v1/rovers/curiosity/photos?sol=100&api_key=$key';
 }
 
