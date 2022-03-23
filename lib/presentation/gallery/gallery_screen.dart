@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
+import '../../core/constants.dart';
+import '../common/app_bar.dart';
 import '../common/bloc_provider.dart';
 import 'gallery_bloc.dart';
 import '../../data/models/mars_rover_photos_response.dart';
@@ -9,7 +12,7 @@ import '../common/base_stateful_widget.dart';
 import '../details/mars_photo_detail_screen.dart';
 
 class GalleryScreen extends BaseStatefulWidget {
-  const GalleryScreen({Key? key}) : super(key: key, title: "Mars rover photos");
+  GalleryScreen({Key? key}) : super(key: key, title: Constants.galleryScreenTitle);
 
   @override
   State<GalleryScreen> createState() => GalleryScreenState();
@@ -18,11 +21,14 @@ class GalleryScreen extends BaseStatefulWidget {
 class GalleryScreenState extends State<GalleryScreen>
     with AutomaticKeepAliveClientMixin<GalleryScreen> {
   bool isListView = false;
-  int itemsNumber = 12;
+  int itemsNumber = 24;
+
+  late IGalleryBloc galleryBloc;
 
   @override
   void initState() {
     super.initState();
+    galleryBloc = Injector().get<IGalleryBloc>();
     galleryBloc.fetchMarsRoverPictures();
   }
 
@@ -52,10 +58,7 @@ class GalleryScreenState extends State<GalleryScreen>
       key: const Key(""),
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-              title: Text(widget.title),
-              backgroundColor: const Color(0xffb121b22),
-              actions: createAppBarActions()),
+          appBar: appBarWidget(widget.title, createAppBarActions()),
           body: StreamBuilder(
             stream: galleryBloc.marsRoverPictures,
             builder:
@@ -99,7 +102,7 @@ class GalleryScreenState extends State<GalleryScreen>
 
             if (marsRoverPhotoResponse == null) {
               return ListView(
-                  children: const [Text("Failed getting Mars rover photos")]);
+                  children: [Text(Constants.gettingMarsRoverFailed)]);
             }
 
             return GestureDetector(
@@ -107,15 +110,16 @@ class GalleryScreenState extends State<GalleryScreen>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MarsPhotoDetailScreen(),
+                    builder: (context) => MarsPhotoDetailScreen(),
                     settings: RouteSettings(
-                      arguments: DetailScreenArguments(index, marsRoverPhotosResponse!),
+                      arguments: DetailScreenArguments(
+                          index, marsRoverPhotosResponse!),
                     ),
                   ),
                 );
               },
               child: Container(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(Constants.commonPadding),
                 decoration: BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.cover,
@@ -142,14 +146,13 @@ class GalleryScreenState extends State<GalleryScreen>
           shrinkWrap: true,
           physics: const ScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-
             MarsRoverPhotosResponse? marsRoverPhotosResponse = response.data;
             MarsRoverPhotoResponse? marsRoverPhotoResponse =
-            marsRoverPhotosResponse?.photos[index];
+                marsRoverPhotosResponse?.photos[index];
 
             if (marsRoverPhotoResponse == null) {
               return ListView(
-                  children: const [Text("Failed getting Mars rover photos")]);
+                  children: [Text(Constants.gettingMarsRoverFailed)]);
             }
 
             return GestureDetector(
@@ -157,9 +160,10 @@ class GalleryScreenState extends State<GalleryScreen>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const MarsPhotoDetailScreen(),
+                      builder: (context) => MarsPhotoDetailScreen(),
                       settings: RouteSettings(
-                        arguments: DetailScreenArguments(index, marsRoverPhotosResponse!),
+                        arguments: DetailScreenArguments(
+                            index, marsRoverPhotosResponse!),
                       )),
                 );
               },

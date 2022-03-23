@@ -1,18 +1,30 @@
 import 'package:rxdart/rxdart.dart';
+
 import '../../data/models/mars_rover_photos_response.dart';
-import '../../data/repositories/astronomy_repository.dart';
-import '../common/base_bloc.dart';
+import '../../data/repositories/iastronomy_repository.dart';
+import '../common/ibase_bloc.dart';
 
-class GalleryBloc extends BaseBloc {
+abstract class IGalleryBloc extends IBaseBloc {
+  Stream<MarsRoverPhotosResponse> get marsRoverPictures;
 
-  final AstronomyRepository astronomyRepository = AstronomyRepository();
+  fetchMarsRoverPictures();
+}
+
+class GalleryBloc extends IGalleryBloc {
+  IAstronomyRepository astronomyRepository;
   final _picturesFetcher = PublishSubject<MarsRoverPhotosResponse>();
 
-  Stream<MarsRoverPhotosResponse> get marsRoverPictures => _picturesFetcher.stream;
+  GalleryBloc(this.astronomyRepository);
 
+  @override
+  Stream<MarsRoverPhotosResponse> get marsRoverPictures =>
+      _picturesFetcher.stream;
+
+  @override
   fetchMarsRoverPictures() async {
-    MarsRoverPhotosResponse? pictures = await astronomyRepository.getMarsRoverPhotos();
-    if(pictures != null) {
+    MarsRoverPhotosResponse? pictures =
+        await astronomyRepository.getMarsRoverPhotos();
+    if (pictures != null) {
       _picturesFetcher.sink.add(pictures);
     }
   }
@@ -21,7 +33,4 @@ class GalleryBloc extends BaseBloc {
   void dispose() {
     _picturesFetcher.close();
   }
-
 }
-
-final galleryBloc = GalleryBloc();

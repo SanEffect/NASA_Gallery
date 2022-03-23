@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import '../../core/constants.dart';
 import '../../data/models/mars_rover_photos_response.dart';
+import '../common/app_bar.dart';
 import '../common/base_stateful_widget.dart';
 
 class DetailScreenArguments {
@@ -11,8 +14,8 @@ class DetailScreenArguments {
 }
 
 class MarsPhotoDetailScreen extends BaseStatefulWidget {
-  const MarsPhotoDetailScreen({Key? key})
-      : super(key: key, title: "Mars rover photo details");
+  MarsPhotoDetailScreen({Key? key})
+      : super(key: key, title: Constants.detailScreenTitle);
 
   @override
   State<MarsPhotoDetailScreen> createState() => MarsPhotoDetailState();
@@ -37,10 +40,7 @@ class MarsPhotoDetailState extends State<MarsPhotoDetailScreen>
 
     return Scaffold(
         // resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-            title: Text(widget.title),
-            backgroundColor: const Color(0xffb121b22),
-            actions: createAppBarActions()),
+        appBar: appBarWidget(widget.title, createAppBarActions()),
         body: PageView.builder(
             itemCount: args.marsRoverPhotosResponse.photos.length,
             pageSnapping: true,
@@ -49,11 +49,22 @@ class MarsPhotoDetailState extends State<MarsPhotoDetailScreen>
               currentIndex = pageIndex;
             },
             itemBuilder: (context, pagePosition) {
-              return Container(
-                  margin: const EdgeInsets.all(10),
-                  child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/images/placeholder-image.png',
-                      image: photos[pagePosition].img_src));
+              return Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: CachedNetworkImage(
+                      imageUrl: photos[pagePosition].img_src,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  )
+                ],
+              ));
             }));
   }
 

@@ -5,20 +5,21 @@ import '../models/apod_response.dart';
 
 part 'astronomy_api_client.g.dart';
 
-class Apis {
+class ApiCalls {
   static const String key = "QCWnMqRWFjbKAYQ7HfRYTN2jEdis2jYf65V2vkf8";
 
-  static const String planetary = 'https://api.nasa.gov/planetary/apod?api_key=$key';
-  static const String marsRoverPhotos = 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=$key';
+  static const String planetary = '/planetary/apod?api_key=$key';
+  // static const String marsRoverPhotos = '/mars-photos/api/v1/rovers/curiosity/photos?sol=100&api_key=$key';
+  static const String marsRoverPhotos = '/mars-photos/api/v1/rovers/curiosity/photos?sol=100&api_key=$key';
 }
 
 @RestApi(baseUrl: "https://api.nasa.gov")
 abstract class ApiClient {
   factory ApiClient(Dio dio, {required String baseUrl}) = _ApiClient;
 
-  @GET(Apis.planetary)
+  @GET(ApiCalls.planetary)
   Future<ApodResponse> getPictureOfTheDay();
 
-  @GET(Apis.marsRoverPhotos)
+  @GET(ApiCalls.marsRoverPhotos)
   Future<MarsRoverPhotosResponse> getMarsRoverPhotos();
 }

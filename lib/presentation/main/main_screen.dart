@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
 
+import '../../core/constants.dart';
+import '../common/app_bar.dart';
 import '../common/bloc_provider.dart';
 import 'main_bloc.dart';
 import '../../data/models/apod_response.dart';
 import '../common/base_stateful_widget.dart';
 
 class MainScreen extends BaseStatefulWidget {
-  const MainScreen({Key? key})
-      : super(key: key, title: "Space Gallery Home Page");
+  MainScreen({Key? key}) : super(key: key, title: Constants.mainScreenTitle);
 
   @override
   State<MainScreen> createState() => MainScreenState();
@@ -15,9 +17,12 @@ class MainScreen extends BaseStatefulWidget {
 
 class MainScreenState extends State<MainScreen>
     with AutomaticKeepAliveClientMixin<MainScreen> {
+  late IMainBloc mainBloc;
+
   @override
   void initState() {
     super.initState();
+    mainBloc = Injector().get<IMainBloc>();
     mainBloc.fetchPictureOfTheDay();
   }
 
@@ -28,10 +33,7 @@ class MainScreenState extends State<MainScreen>
       key: const Key(""),
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: Text(widget.title),
-            backgroundColor: const Color(0xffb121b22),
-          ),
+          appBar: appBarWidget(widget.title, null),
           body: StreamBuilder(
             stream: mainBloc.pictureOfTheDay,
             builder: (context, AsyncSnapshot<ApodResponse> response) {
@@ -55,13 +57,13 @@ class MainScreenState extends State<MainScreen>
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Astronomy Picture of the day",
+                  Constants.astroPictureOfTheDay,
                   style: Theme.of(context).textTheme.headline6,
                 )),
             Container(
                 color: Colors.white,
                 child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/images/placeholder-image.png',
+                    placeholder: Constants.placeholderImagePath,
                     image: response.data!.url)),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -79,6 +81,7 @@ class MainScreenState extends State<MainScreen>
   @override
   void dispose() {
     mainBloc.dispose();
+    Injector().dispose();
     super.dispose();
   }
 }

@@ -3,16 +3,16 @@
 
 import 'package:flutter/cupertino.dart';
 
-import 'base_bloc.dart';
+import 'ibase_bloc.dart';
 
-class BlocProvider<T extends BaseBloc> extends StatefulWidget {
+class BlocProvider<T extends IBaseBloc> extends StatefulWidget {
   final Widget child;
   final T bloc;
 
   const BlocProvider({required Key key, required this.bloc, required this.child})
       : super(key: key);
 
-  static T of<T extends BaseBloc>(BuildContext context) {
+  static T of<T extends IBaseBloc>(BuildContext context) {
     final type = _providerType<BlocProvider<T>>();
     // final BlocProvider<T> provider = context.findAncestorWidgetOfExactType(type);
     final BlocProvider<T> provider = context.getElementForInheritedWidgetOfExactType() as BlocProvider<T>;
