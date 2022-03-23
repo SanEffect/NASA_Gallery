@@ -27,7 +27,7 @@ class _ApiClient implements ApiClient {
         ApodResponse>(Options(
             method: 'GET', headers: _headers, extra: _extra)
         .compose(_dio.options,
-            'https://api.nasa.gov/planetary/apod?api_key=QCWnMqRWFjbKAYQ7HfRYTN2jEdis2jYf65V2vkf8',
+            '/planetary/apod?api_key=QCWnMqRWFjbKAYQ7HfRYTN2jEdis2jYf65V2vkf8',
             queryParameters: queryParameters, data: _data)
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = ApodResponse.fromJson(_result.data!);
@@ -44,7 +44,7 @@ class _ApiClient implements ApiClient {
         MarsRoverPhotosResponse>(Options(
             method: 'GET', headers: _headers, extra: _extra)
         .compose(_dio.options,
-            'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=QCWnMqRWFjbKAYQ7HfRYTN2jEdis2jYf65V2vkf8',
+            '/mars-photos/api/v1/rovers/curiosity/photos?sol=100&api_key=QCWnMqRWFjbKAYQ7HfRYTN2jEdis2jYf65V2vkf8',
             queryParameters: queryParameters, data: _data)
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = MarsRoverPhotosResponse.fromJson(_result.data!);

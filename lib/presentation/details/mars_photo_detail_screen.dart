@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/constants.dart';
 import '../../data/models/mars_rover_photos_response.dart';
@@ -39,7 +40,7 @@ class MarsPhotoDetailState extends State<MarsPhotoDetailScreen>
     photos = args.marsRoverPhotosResponse.photos;
 
     return Scaffold(
-        // resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         appBar: appBarWidget(widget.title, createAppBarActions()),
         body: PageView.builder(
             itemCount: args.marsRoverPhotosResponse.photos.length,
@@ -50,20 +51,20 @@ class MarsPhotoDetailState extends State<MarsPhotoDetailScreen>
             },
             itemBuilder: (context, pagePosition) {
               return Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: CachedNetworkImage(
-                      imageUrl: photos[pagePosition].img_src,
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                    ),
-                  )
-                ],
+                  child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: PinchZoom(
+                  child: CachedNetworkImage(
+                    imageUrl: photos[pagePosition].img_src,
+                    placeholder: (context, url) => Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [CircularProgressIndicator()]),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                  resetDuration: const Duration(milliseconds: 100),
+                  maxScale: 2.5,
+                ),
               ));
             }));
   }

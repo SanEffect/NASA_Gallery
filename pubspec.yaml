@@ -45,6 +45,7 @@ dependencies:
   cached_network_image: ^3.2.0
   rxdart: ^0.27.3
   flutter_simple_dependency_injection: ^2.0.0
+  pinch_zoom: ^1.0.0
 
 dev_dependencies:
   flutter_test:
