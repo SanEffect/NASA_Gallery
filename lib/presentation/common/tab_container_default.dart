@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/constants.dart';
 import '../gallery/gallery_screen.dart';
 import '../main/main_screen.dart';
 
@@ -12,12 +13,13 @@ class TabContainerDefault extends StatefulWidget {
 
 class _TabContainerDefaultState extends State<TabContainerDefault> {
   List<Widget> listScreens = [];
+
   @override
   void initState() {
     super.initState();
     listScreens = [
-      const MainScreen(),
-      const GalleryScreen(),
+      MainScreen(),
+      GalleryScreen(),
     ];
   }
 
@@ -29,16 +31,17 @@ class _TabContainerDefaultState extends State<TabContainerDefault> {
         length: 2,
         child: Scaffold(
           body: TabBarView(
-              physics: const NeverScrollableScrollPhysics(), children: listScreens),
-          bottomNavigationBar: const TabBar(
+              physics: const NeverScrollableScrollPhysics(),
+              children: listScreens),
+          bottomNavigationBar: TabBar(
             tabs: [
               Tab(
-                text: 'Home',
-                icon: Icon(Icons.home),
+                text: Constants.tabHomeTitle,
+                icon: const Icon(Icons.home),
               ),
               Tab(
-                text: 'Gallery',
-                icon: Icon(Icons.image),
+                text: Constants.tabGalleryTitle,
+                icon: const Icon(Icons.image),
               ),
             ],
           ),

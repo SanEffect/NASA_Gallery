@@ -1,15 +1,25 @@
 import 'package:rxdart/rxdart.dart';
 
 import '../../data/models/apod_response.dart';
-import '../../data/repositories/astronomy_repository.dart';
-import '../common/base_bloc.dart';
+import '../../data/repositories/iastronomy_repository.dart';
+import '../common/ibase_bloc.dart';
 
-class MainBloc extends BaseBloc {
-  final AstronomyRepository astronomyRepository = AstronomyRepository();
+abstract class IMainBloc extends IBaseBloc {
+  Stream<ApodResponse> get pictureOfTheDay;
+
+  fetchPictureOfTheDay();
+}
+
+class MainBloc extends IMainBloc {
+  IAstronomyRepository astronomyRepository;
   final _pictureFetcher = PublishSubject<ApodResponse>();
 
+  MainBloc(this.astronomyRepository);
+
+  @override
   Stream<ApodResponse> get pictureOfTheDay => _pictureFetcher.stream;
 
+  @override
   fetchPictureOfTheDay() async {
     ApodResponse? picture = await astronomyRepository.getPictureOfTheDay();
     if (picture != null) {
@@ -22,5 +32,3 @@ class MainBloc extends BaseBloc {
     _pictureFetcher.close();
   }
 }
-
-final mainBloc = MainBloc();
